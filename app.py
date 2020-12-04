@@ -85,16 +85,27 @@ class Main:
 
     def game_over(self):
         if 0 > int(self.snake.body[0].x) or int(self.snake.body[0].x) > cell_num - 1 or int(self.snake.body[0].y) < 0 or int(self.snake.body[0].y) > cell_num - 1:
-            pygame.quit()
-            quit()
+            font = pygame.font.Font('freesansbold.ttf', 32)
+            text = font.render("You lost!!!", True, white)
+            screen.blit(text, (WIDTH // 2 - text.get_width() // 2, 150))
+
+            self.snake.body = [Vector2(10,10), Vector2(11,10)]
+            self.snake.direction = Vector2(1,0)
+            menu()
         for rect in self.snake.body[1:]:
             if self.snake.body[0] == rect:
-                pygame.quit()
-                quit()
+                font = pygame.font.Font('freesansbold.ttf', 32)
+                text = font.render("You lost!!!", True, white)
+                screen.blit(text, (WIDTH // 2 - text.get_width() // 2, 150))
+
+                self.snake.body = [Vector2(10,10), Vector2(11,10)]
+                self.snake.direction = Vector2(1,0)
+                menu()
                     
 
 cell_size = 40
 cell_num = 20
+WIDTH, HEIGHT = cell_size * cell_num, cell_size * cell_num
 screen = pygame.display.set_mode((cell_num * cell_size, cell_num * cell_size))
 
 clock = pygame.time.Clock()
@@ -109,6 +120,22 @@ blue = (0,0,255)
 game = Main()
 
 pygame.time.set_timer(pygame.USEREVENT,100)
+
+def menu():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    mainloop()
+
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        text = font.render("Press spacebar to start", True, white)
+        screen.blit(text, (WIDTH // 2 - text.get_width() // 2, 300))
+        pygame.display.update()
 
 def mainloop():
     while True:
@@ -141,7 +168,7 @@ def mainloop():
         pygame.display.update()
         clock.tick(60)
 
-mainloop()
+menu()
 
 pygame.quit()
 quit()
